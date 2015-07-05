@@ -1,0 +1,5 @@
+is_lazy_string
+make_lazy_string
+make_lazy_gettext
+_LazyString
+doctest

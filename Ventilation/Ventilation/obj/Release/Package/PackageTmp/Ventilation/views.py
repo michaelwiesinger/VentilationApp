@@ -1,0 +1,206 @@
+"""
+Routes and views for the flask application.
+"""
+
+from datetime import datetime
+from flask import render_template, json,  request, jsonify
+from Ventilation import app
+import simplejson
+import yaml
+import config
+import pydocumentdb.document_client as document_client
+import pusher
+
+
+@app.route('/')
+@app.route('/home')
+def home():
+    """Renders the home page."""
+    return render_template(
+        'index.html'
+    )
+
+@app.route('/create')
+def create():
+    
+    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
+
+    # Attempt to delete the database.  This allows this to be used to recreate
+    # as well as create
+    try:
+        db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
+        client.DeleteDatabase(db['_self'])
+    except:
+        pass
+
+    # Create database
+    db = client.CreateDatabase({ 'id': config.DOCUMENTDB_DATABASE })
+    # Create collection
+    collection = client.CreateCollection(db['_self'],{ 'id': config.DOCUMENTDB_COLLECTION }, { 'offerType': 'S1' })
+    # Create document
+
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          'id': "1",
+          'counter': 1,
+          'Inside': {
+                    "temp" : 29.6,
+                    "rel-humid": 0.47,
+                    "abs-humid":13.92
+                },
+      
+          'name': config.DOCUMENTDB_DOCUMENT })
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          'id': "2",
+          'counter': 2,
+          'Inside': {
+                   "temp" : 29.6,
+                    "rel-humid": 0.47,
+                    "abs-humid":13.92
+                },
+      
+          'name': config.DOCUMENTDB_DOCUMENT })
+
+  
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          'id': "3",
+          'counter': 3,
+          'Inside': {
+                    "temp" : 29.6,
+                    "rel-humid": 0.47,
+                    "abs-humid":13.92
+                },
+      
+          'name': config.DOCUMENTDB_DOCUMENT })
+
+
+ 
+
+    return render_template('create.html',
+        title='Create Page',
+        year=datetime.now().year,
+        message='You just created a new database, collection, and document.  Your old votes have been deleted')
+
+@app.route("/new")
+def new():
+   
+    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
+    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
+    coll = next((coll for coll in client.ReadCollections(db['_self']) if coll['id'] == config.DOCUMENTDB_COLLECTION))
+
+    #doc = next((doc for doc in client.ReadDocuments(coll['_self']) if doc['id'] == config.DOCUMENTDB_DOCUMENT))
+
+    # create a document
+    id = coll
+        
+    document_definition = {'Inside': {
+                "temp" : 0.0,
+                "rel-humid":0.0,
+                "abs-humid":0.0
+            }}
+
+    created_document = client.CreateDocument(
+            coll['_self'],
+            document_definition)
+
+@app.route("/show")
+def show():
+
+    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
+    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
+    coll = next((coll for coll in client.ReadCollections(db['_self'])))
+
+    lala = list(client.QueryDocuments(
+            coll['_self'],
+            {
+                'query': 'SELECT * FROM c'
+            }))
+
+    pretty = json.loads(json.dumps(lala))
+
+    return render_template('results.html',
+            year=datetime.now().year,
+            docs = json.dumps(pretty, indent=4))
+
+@app.route("/insert", methods=['GET', 'POST'])
+def insert():
+
+    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
+    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
+    coll = next((coll for coll in client.ReadCollections(db['_self'])))
+
+    temporaryJson = simplejson.loads(json.dumps(request.json))
+    
+    documents = list(client.QueryDocuments(coll['_self'],   {'query': 'SELECT * FROM c.counter'  }))
+    #documents = documents[:2-1]
+    #del documents[-2:]
+
+    ints = map(int, simplejson.loads(json.dumps(documents)))
+
+    temporaryJson['counter'] = max(ints)+1
+    temporaryJson['date'] = datetime.now().isoformat()
+
+    created_document = client.CreateDocument(coll['_self'],temporaryJson)
+
+    return render_template('index.html'), 200;
+
+@app.route("/fanOn")
+def fanOn():
+
+    p = pusher.Pusher(
+      app_id='128311',
+      key='873a24ad290781cb445c',
+      secret='497979490241f4842d2d'
+    )
+
+    p.trigger(u'ventilation_channel', u'v_on', {u'message' : u'v_on'})
+    
+    return render_template('index.html',
+    message='fan is now on')
+
+@app.route("/off")
+def fanOff():
+
+    p = pusher.Pusher(
+      app_id='128311',
+      key='873a24ad290781cb445c',
+      secret='497979490241f4842d2d'
+    )
+    
+    p.trigger(u'ventilation_channel', u'off', {u'message' : u'off'})
+    
+    return render_template('index.html',
+    message='fan is now off')
+
+@app.route("/eOn")
+def eOn():
+
+    p = pusher.Pusher(
+      app_id='128311',
+      key='873a24ad290781cb445c',
+      secret='497979490241f4842d2d'
+    )
+    
+    p.trigger(u'ventilation_channel', u'e_on', {u'message' : u'e_on'})
+    
+    return render_template('index.html',
+    message='fan is now on economy mode')
+
+@app.route("/eOff")
+def eOff():
+
+    p = pusher.Pusher(
+      app_id='128311',
+      key='873a24ad290781cb445c',
+      secret='497979490241f4842d2d'
+    )
+    
+    p.trigger(u'ventilation_channel', u'e_on', {u'message' : u'e_off'})
+    
+    return render_template('index.html',
+    message='fan is now off')
+

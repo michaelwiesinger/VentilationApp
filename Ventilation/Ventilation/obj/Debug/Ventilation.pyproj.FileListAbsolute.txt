@@ -1,0 +1,15 @@
+C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\Microsoft.PythonTools.WebRole.dll
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\attach_server.py
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\visualstudio_py_debugger.py
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\visualstudio_py_repl.py
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\visualstudio_py_util.py
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\__init__.py
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\__main__.py
+C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\AzureSetup.cfg
+C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\Microsoft.PythonTools.AzureSetup.exe
+C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\Microsoft.PythonTools.AzureSetup.exe.config
+C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\wfastcgi.py
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\deployment-updated-orig-prefix.txt
+C:\Users\Michael\Desktop\Ventilation\Ventilation\ptvs_virtualenv_proxy.py
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\web.config
+C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Debug\web.debug.config
