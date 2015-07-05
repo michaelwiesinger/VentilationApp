@@ -16,9 +16,7 @@ import pusher
 @app.route('/home')
 def home():
     """Renders the home page."""
-    return render_template(
-        'index.html'
-    )
+    return render_template('index.html')
 
 @app.route('/create')
 def create():
@@ -42,40 +40,214 @@ def create():
 
     document = client.CreateDocument(collection['_self'],
         { #'id': config.DOCUMENTDB_DOCUMENT,
-          'id': "1",
           'counter': 1,
-          'Inside': {
+          'inside': {
                     "temp" : 29.6,
                     "rel-humid": 0.47,
-                    "abs-humid":13.92
+                    "abs-humid":13.96
                 },
-      
-          'name': config.DOCUMENTDB_DOCUMENT })
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.00
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
 
     document = client.CreateDocument(collection['_self'],
         { #'id': config.DOCUMENTDB_DOCUMENT,
-          'id': "2",
+          
           'counter': 2,
-          'Inside': {
-                   "temp" : 29.6,
-                    "rel-humid": 0.47,
-                    "abs-humid":13.92
+          'inside': {
+                    "temp" : 30.6,
+                    "rel-humid": 0.45,
+                    "abs-humid":13.98
                 },
-      
-          'name': config.DOCUMENTDB_DOCUMENT })
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.00
+                }
+          ,
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          
+          'counter': 3,
+          'inside': {
+                    "temp" : 29.0,
+                    "rel-humid": 0.50,
+                    "abs-humid":13.90
+                },
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.00
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          
+          'counter': 4,
+          'inside': {
+                    "temp" : 29.1,
+                    "rel-humid": 0.47,
+                    "abs-humid":13.89
+                },
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.00
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          
+          'counter': 5,
+          'inside': {
+                   "temp" : 29.7,
+                    "rel-humid": 0.47,
+                    "abs-humid":13.89
+                },
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.00
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
 
   
     document = client.CreateDocument(collection['_self'],
         { #'id': config.DOCUMENTDB_DOCUMENT,
-          'id': "3",
-          'counter': 3,
-          'Inside': {
-                    "temp" : 29.6,
-                    "rel-humid": 0.47,
-                    "abs-humid":13.92
+          
+          'counter': 6,
+          'inside': {
+                    "temp" : 29.5,
+                    "rel-humid": 0.43,
+                    "abs-humid":13.91
                 },
-      
-          'name': config.DOCUMENTDB_DOCUMENT })
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.03
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          
+          'counter': 7,
+          'inside': {
+                    "temp" : 30.3,
+                    "rel-humid": 0.42,
+                    "abs-humid":13.91
+                },
+          'outside': {
+                    "temp" : 32.7,
+                    "rel-humid": 0.37,
+                    "abs-humid": 11.00
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          
+          'counter': 8,
+          'inside': {
+                    "temp" : 29.6,
+                    "rel-humid": 0.43,
+                    "abs-humid":13.91
+                },
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.20
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          
+          'counter': 9,
+          'inside': {
+                    "temp" : 29.3,
+                    "rel-humid": 0.42,
+                    "abs-humid":13.87
+                },
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.10
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
+
+    document = client.CreateDocument(collection['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          
+          'counter': 10,
+          'inside': {
+                    "temp" : 29.5,
+                    "rel-humid": 0.43,
+                    "abs-humid":13.91
+                },
+          'outside': {
+                    "temp" : 32.8,
+                    "rel-humid": 0.32,
+                    "abs-humid":10.80
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
 
 
  
@@ -92,7 +264,8 @@ def new():
     db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
     coll = next((coll for coll in client.ReadCollections(db['_self']) if coll['id'] == config.DOCUMENTDB_COLLECTION))
 
-    #doc = next((doc for doc in client.ReadDocuments(coll['_self']) if doc['id'] == config.DOCUMENTDB_DOCUMENT))
+    #doc = next((doc for doc in client.ReadDocuments(coll['_self']) if
+    #doc['id'] == config.DOCUMENTDB_DOCUMENT))
 
     # create a document
     id = coll
@@ -103,8 +276,7 @@ def new():
                 "abs-humid":0.0
             }}
 
-    created_document = client.CreateDocument(
-            coll['_self'],
+    created_document = client.CreateDocument(coll['_self'],
             document_definition)
 
 @app.route("/show")
@@ -114,17 +286,40 @@ def show():
     db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
     coll = next((coll for coll in client.ReadCollections(db['_self'])))
 
-    lala = list(client.QueryDocuments(
-            coll['_self'],
+    lala = list(client.QueryDocuments(coll['_self'],
             {
                 'query': 'SELECT * FROM c'
             }))
 
     pretty = json.loads(json.dumps(lala))
 
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.inside.temp'
+            }))
+
+    insideTemp = map(float, simplejson.loads(json.dumps(query)))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.outside.temp'
+            }))
+
+    outsideTemp = map(float, simplejson.loads(json.dumps(query)))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.counter'
+            }))
+
+    counter = json.dumps(query)
+
     return render_template('results.html',
             year=datetime.now().year,
-            docs = json.dumps(pretty, indent=4))
+            docs = json.dumps(pretty, indent=4),
+            insideTemp = insideTemp[-25:],
+            outsideTemp = outsideTemp[-25:],
+            counter = 50)
 
 @app.route("/insert", methods=['GET', 'POST'])
 def insert():
@@ -141,21 +336,19 @@ def insert():
 
     ints = map(int, simplejson.loads(json.dumps(documents)))
 
-    temporaryJson['counter'] = max(ints)+1
+    temporaryJson['counter'] = max(ints) + 1
     temporaryJson['date'] = datetime.now().isoformat()
 
     created_document = client.CreateDocument(coll['_self'],temporaryJson)
 
-    return render_template('index.html'), 200;
+    return render_template('index.html'), 200
 
 @app.route("/fanOn")
 def fanOn():
 
-    p = pusher.Pusher(
-      app_id='128311',
+    p = pusher.Pusher(app_id='128311',
       key='873a24ad290781cb445c',
-      secret='497979490241f4842d2d'
-    )
+      secret='497979490241f4842d2d')
 
     p.trigger(u'ventilation_channel', u'v_on', {u'message' : u'v_on'})
     
@@ -165,11 +358,9 @@ def fanOn():
 @app.route("/off")
 def fanOff():
 
-    p = pusher.Pusher(
-      app_id='128311',
+    p = pusher.Pusher(app_id='128311',
       key='873a24ad290781cb445c',
-      secret='497979490241f4842d2d'
-    )
+      secret='497979490241f4842d2d')
     
     p.trigger(u'ventilation_channel', u'off', {u'message' : u'off'})
     
@@ -179,11 +370,9 @@ def fanOff():
 @app.route("/eOn")
 def eOn():
 
-    p = pusher.Pusher(
-      app_id='128311',
+    p = pusher.Pusher(app_id='128311',
       key='873a24ad290781cb445c',
-      secret='497979490241f4842d2d'
-    )
+      secret='497979490241f4842d2d')
     
     p.trigger(u'ventilation_channel', u'e_on', {u'message' : u'e_on'})
     
@@ -193,11 +382,9 @@ def eOn():
 @app.route("/eOff")
 def eOff():
 
-    p = pusher.Pusher(
-      app_id='128311',
+    p = pusher.Pusher(app_id='128311',
       key='873a24ad290781cb445c',
-      secret='497979490241f4842d2d'
-    )
+      secret='497979490241f4842d2d')
     
     p.trigger(u'ventilation_channel', u'e_on', {u'message' : u'e_off'})
     

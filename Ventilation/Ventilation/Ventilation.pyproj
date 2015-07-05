@@ -21,6 +21,7 @@
     <InterpreterId>{1e82346d-3e4b-447f-baa3-0669fea2f046}</InterpreterId>
     <InterpreterVersion>2.7</InterpreterVersion>
     <NameOfLastUsedPublishProfile>ventilationservice</NameOfLastUsedPublishProfile>
+    <WebBrowserPort>1234</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +45,9 @@
     <Folder Include="Ventilation\static\content\" />
     <Folder Include="Ventilation\static\fonts\" />
     <Folder Include="Ventilation\static\scripts\" />
+    <Folder Include="Ventilation\static\scripts\bower_components\" />
+    <Folder Include="Ventilation\static\scripts\bower_components\Chart.js\" />
+    <Folder Include="Ventilation\static\scripts\bower_components\Chart.js\src\" />
     <Folder Include="Ventilation\templates\" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +62,8 @@
     <Content Include="Ventilation\static\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Ventilation\static\scripts\bootstrap.js" />
     <Content Include="Ventilation\static\scripts\bootstrap.min.js" />
+    <Content Include="Ventilation\static\scripts\bower_components\Chart.js\Chart.min.js" />
+    <Content Include="Ventilation\static\scripts\bower_components\Chart.js\src\Chart.Line.js" />
     <Content Include="Ventilation\static\scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Ventilation\static\scripts\jquery-1.10.2.js" />
     <Content Include="Ventilation\static\scripts\jquery-1.10.2.min.js" />
