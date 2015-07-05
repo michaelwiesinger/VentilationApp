@@ -1,9 +1,0 @@
-C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\Microsoft.PythonTools.WebRole.dll
-C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\AzureSetup.cfg
-C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\Microsoft.PythonTools.AzureSetup.exe
-C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\Microsoft.PythonTools.AzureSetup.exe.config
-C:\Users\Michael\Desktop\Ventilation\Ventilation\bin\wfastcgi.py
-C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Release\deployment-updated-orig-prefix.txt
-C:\Users\Michael\Desktop\Ventilation\Ventilation\ptvs_virtualenv_proxy.py
-C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Release\web.config
-C:\Users\Michael\Desktop\Ventilation\Ventilation\obj\Release\web.debug.config
