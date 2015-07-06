@@ -117,7 +117,27 @@ def create():
     collection = client.CreateCollection(db['_self'],{ 'id': config.DOCUMENTDB_COLLECTION }, { 'offerType': 'S1' })
     # Create collection for latest entry
 
-    collection = client.CreateCollection(db['_self'],{ 'id': config.DOCUMENTDB_COLLECTION_LATEST }, { 'offerType': 'S1' })
+    collection2 = client.CreateCollection(db['_self'],{ 'id': config.DOCUMENTDB_COLLECTION_LATEST }, { 'offerType': 'S1' })
+
+    document = client.CreateDocument(collection2['_self'],
+        { #'id': config.DOCUMENTDB_DOCUMENT,
+          'counter': 1,
+          'inside': {
+                    "temp" : 29.6,
+                    "rel-humid": 0.47,
+                    "abs-humid":13.96
+                },
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.00
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
 
     #create initial document
     document = client.CreateDocument(collection['_self'],
@@ -355,7 +375,49 @@ def new():
             }))
       
     return json.dumps(query)
+
+@app.route("/lala")
+def lala():
+    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
+    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
     
+    # add entry to collection latest
+    
+    #get collection
+    coll_latest = next((colli for colli in client.ReadCollections(db['_self']) if colli['id'] == config.DOCUMENTDB_COLLECTION_LATEST))
+
+    # Take the data from the deploy_preference and increment our database
+    client.DeleteCollection(coll_latest['_self'])
+    coll_latest = client.CreateCollection(db['_self'],{ 'id': config.DOCUMENTDB_COLLECTION_LATEST }, { 'offerType': 'S1' })
+
+    document = client.CreateDocument(coll_latest['_self'],
+        { 
+          
+          'counter': 1,
+          'inside': {
+                    "temp" : 29.6,
+                    "rel-humid": 0.47,
+                    "abs-humid":13.96
+                },
+          'outside': {
+                    "temp" : 32.6,
+                    "rel-humid": 0.37,
+                    "abs-humid":10.00
+                },
+          "fan": {
+              "active": False,
+              "override": False,
+              "eco-mode": False
+            }
+          })
+
+    #coll_latest = client.CreateCollection(db['_self'],{ 'id':
+    #config.DOCUMENTDB_COLLECTION_LATEST }, { 'offerType': 'S1' })
+    #created_document = client.CreateDocument(coll_latest['_self'],
+    #temporaryJson)
+
+    return render_template('index.html'), 200
+
 @app.route("/insert", methods=['GET', 'POST'])
 def insert():
 
@@ -366,21 +428,27 @@ def insert():
     temporaryJson = simplejson.loads(json.dumps(request.json))
     
     documents = list(client.QueryDocuments(coll['_self'],   {'query': 'SELECT * FROM c.counter'  }))
-    #documents = documents[:2-1]
-    #del documents[-2:]
 
     ints = map(int, simplejson.loads(json.dumps(documents)))
 
     temporaryJson['counter'] = max(ints) + 1
     temporaryJson['date'] = datetime.now().isoformat()
 
-    created_document = client.CreateDocument(coll['_self'],temporaryJson)
+    created_document = client.CreateDocument(coll['_self'], temporaryJson)
 
     # add entry to collection latest
     
     #get collection
-    coll_latest = next((coll for coll in client.ReadCollections(db['_self']) if coll['id'] == config.DOCUMENTDB_COLLECTION_LATEST))
-    created_document = client.CreateDocument(coll_latest['_self'],temporaryJson)
+    coll_latest = next((colli for colli in client.ReadCollections(db['_self']) if colli['id'] == config.DOCUMENTDB_COLLECTION_LATEST))
+
+    # Read documents and take first since id should not be duplicated.
+    doc = next((doc for doc in client.ReadDocuments(coll_latest['_self'])))
+
+    client.DeleteDocument(doc['_self'])
+    created_document = client.CreateDocument(coll_latest['_self'], temporaryJson)
+
+    # Take the data from the deploy_preference and increment our database
+    #replaced_document = client.ReplaceDocument(doc['_self'], temporaryJson)
 
     return render_template('index.html'), 200
 
