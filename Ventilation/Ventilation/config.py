@@ -8,4 +8,5 @@ DOCUMENTDB_KEY = 'i+LkFYU++N98bjOnBXO7yxuLHdYed6PDuFBeTcqHk5EHxI4x4W2xtKrvgllhj3
 
 DOCUMENTDB_DATABASE = 'ventilation'
 DOCUMENTDB_COLLECTION = 'ventilation collection'
+DOCUMENTDB_COLLECTION_LATEST = 'ventilation latest'
 DOCUMENTDB_DOCUMENT = 'ventilation document'

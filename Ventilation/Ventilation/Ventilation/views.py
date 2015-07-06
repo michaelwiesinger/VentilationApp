@@ -35,9 +35,11 @@ def create():
     db = client.CreateDatabase({ 'id': config.DOCUMENTDB_DATABASE })
     # Create collection
     collection = client.CreateCollection(db['_self'],{ 'id': config.DOCUMENTDB_COLLECTION }, { 'offerType': 'S1' })
-    # Create document
+    # Create collection for latest entry
 
+    collection = client.CreateCollection(db['_self'],{ 'id': config.DOCUMENTDB_COLLECTION_LATEST }, { 'offerType': 'S1' })
 
+    #create initial document
     document = client.CreateDocument(collection['_self'],
         { #'id': config.DOCUMENTDB_DOCUMENT,
           'counter': 1,
@@ -257,28 +259,6 @@ def create():
         year=datetime.now().year,
         message='You just created a new database, collection, and document.  Your old votes have been deleted')
 
-@app.route("/new")
-def new():
-   
-    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
-    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
-    coll = next((coll for coll in client.ReadCollections(db['_self']) if coll['id'] == config.DOCUMENTDB_COLLECTION))
-
-    #doc = next((doc for doc in client.ReadDocuments(coll['_self']) if
-    #doc['id'] == config.DOCUMENTDB_DOCUMENT))
-
-    # create a document
-    id = coll
-        
-    document_definition = {'Inside': {
-                "temp" : 0.0,
-                "rel-humid":0.0,
-                "abs-humid":0.0
-            }}
-
-    created_document = client.CreateDocument(coll['_self'],
-            document_definition)
-
 @app.route("/show")
 def show():
 
@@ -321,6 +301,21 @@ def show():
             outsideTemp = outsideTemp[-25:],
             counter = 50)
 
+@app.route("/latest")
+def new():
+   
+    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
+    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
+
+    coll = next((coll for coll in client.ReadCollections(db['_self']) if coll['id'] == config.DOCUMENTDB_COLLECTION_LATEST))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c'
+            }))
+      
+    return json.dumps(query)
+    
 @app.route("/insert", methods=['GET', 'POST'])
 def insert():
 
@@ -340,6 +335,12 @@ def insert():
     temporaryJson['date'] = datetime.now().isoformat()
 
     created_document = client.CreateDocument(coll['_self'],temporaryJson)
+
+    # add entry to collection latest
+    
+    #get collection
+    coll_latest = next((coll for coll in client.ReadCollections(db['_self']) if coll['id'] == config.DOCUMENTDB_COLLECTION_LATEST))
+    created_document = client.CreateDocument(coll_latest['_self'],temporaryJson)
 
     return render_template('index.html'), 200
 

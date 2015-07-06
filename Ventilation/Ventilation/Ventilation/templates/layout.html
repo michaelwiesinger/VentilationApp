@@ -25,10 +25,38 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a href="/" class="navbar-brand">Application name</a>
+
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url_for('show') }}">Statistics</a></li>
+                    <li>
+                        <p class="navbar-btn">
+                            <a href="/fanOn" class="btn btn-primary btn-large">ventilation on</a>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="navbar-btn">
+                            <a href="/eOn" class="btn btn-success btn-large">economy on</a>
+                        </p>
+                    </li>
+                    <li>
+                        <p class="navbar-btn">
+                            <a href="/off" class="btn btn-danger btn-large">ventilation off</a>
+                        </p>
+                    </li>
+                    
+                    <li>
+                        <p class="navbar-btn">
+                            <a href="/eOff" class="btn btn-danger btn-large">economy off</a>
+                        </p>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><span class="temp badge" id="random">0</span></li>
+
                 </ul>
             </div>
         </div>
@@ -43,42 +71,42 @@
         </footer>
     </div>
 
-    
+
     <script src="/static/scripts/app.js"></script>
     {% block scripts %}{% endblock %}
 
-<script>
-    
-       // Enable pusher logging - don't include this in production
-       Pusher.log = function (message) {
-           if (window.console && window.console.log) {
-               window.console.log(message);
-           }
-       };
+    <script>
 
-    var pusher = new Pusher('873a24ad290781cb445c', {
-        encrypted: true
-    });
+        // Enable pusher logging - don't include this in production
+        Pusher.log = function (message) {
+            if (window.console && window.console.log) {
+                window.console.log(message);
+            }
+        };
 
-    var channel = pusher.subscribe('ventilation_channel');
-    channel.bind('v_on', function (data) {
-        alert(data.message);
-    });
+        var pusher = new Pusher('873a24ad290781cb445c', {
+            encrypted: true
+        });
 
-    channel.bind('off', function (data) {
-        alert(data.message);
-    });
+        var channel = pusher.subscribe('ventilation_channel');
+        channel.bind('v_on', function (data) {
+            alert(data.message);
+        });
 
-    channel.bind('e_on', function (data) {
-        alert(data.message);
-    });
+        channel.bind('off', function (data) {
+            alert(data.message);
+        });
 
-    channel.bind('e_off', function (data) {
-        alert(data.message);
-    });
+        channel.bind('e_on', function (data) {
+            alert(data.message);
+        });
 
-    
-    
-</script>
+        channel.bind('e_off', function (data) {
+            alert(data.message);
+        });
+
+
+
+    </script>
 </body>
 </html>
