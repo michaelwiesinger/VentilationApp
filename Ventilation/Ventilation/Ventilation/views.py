@@ -1,6 +1,5 @@
-"""
-Routes and views for the flask application.
-"""
+#-*- coding: utf-8 -*-
+
 
 from datetime import datetime
 from flask import render_template, json,  request, jsonify
@@ -10,13 +9,94 @@ import yaml
 import config
 import pydocumentdb.document_client as document_client
 import pusher
-
+import sys
+reload(sys)  # Reload does the trick!
+sys.setdefaultencoding('UTF8')
 
 @app.route('/')
 @app.route('/home')
 def home():
-    """Renders the home page."""
-    return render_template('index.html')
+    
+
+    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
+    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
+    coll = next((coll for coll in client.ReadCollections(db['_self'])))
+
+    lala = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c'
+            }))
+
+    pretty = json.loads(json.dumps(lala))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.inside.temp'
+            }))
+
+    insideTemp = map(float, simplejson.loads(json.dumps(query)))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.outside.temp'
+            }))
+
+    outsideTemp = map(float, simplejson.loads(json.dumps(query)))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.counter'
+            }))
+
+    counter = json.dumps(query)
+
+
+    return render_template('index.html',  docs = json.dumps(pretty, indent=4),
+            insideTemp = insideTemp[-25:],
+            outsideTemp = outsideTemp[-25:],
+            counter = 50)
+
+@app.route("/show")
+def show():
+
+    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
+    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
+    coll = next((coll for coll in client.ReadCollections(db['_self'])))
+
+    lala = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c'
+            }))
+
+    pretty = json.loads(json.dumps(lala))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.inside.temp'
+            }))
+
+    insideTemp = map(float, simplejson.loads(json.dumps(query)))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.outside.temp'
+            }))
+
+    outsideTemp = map(float, simplejson.loads(json.dumps(query)))
+
+    query = list(client.QueryDocuments(coll['_self'],
+            {
+                'query': 'SELECT * FROM c.counter'
+            }))
+
+    counter = json.dumps(query)
+
+    return render_template('results.html',
+            year=datetime.now().year,
+            docs = json.dumps(pretty, indent=4),
+            insideTemp = insideTemp[-25:],
+            outsideTemp = outsideTemp[-25:],
+            counter = 50)
 
 @app.route('/create')
 def create():
@@ -259,47 +339,7 @@ def create():
         year=datetime.now().year,
         message='You just created a new database, collection, and document.  Your old votes have been deleted')
 
-@app.route("/show")
-def show():
 
-    client = document_client.DocumentClient(config.DOCUMENTDB_HOST, {'masterKey': config.DOCUMENTDB_KEY})
-    db = next((data for data in client.ReadDatabases() if data['id'] == config.DOCUMENTDB_DATABASE))
-    coll = next((coll for coll in client.ReadCollections(db['_self'])))
-
-    lala = list(client.QueryDocuments(coll['_self'],
-            {
-                'query': 'SELECT * FROM c'
-            }))
-
-    pretty = json.loads(json.dumps(lala))
-
-    query = list(client.QueryDocuments(coll['_self'],
-            {
-                'query': 'SELECT * FROM c.inside.temp'
-            }))
-
-    insideTemp = map(float, simplejson.loads(json.dumps(query)))
-
-    query = list(client.QueryDocuments(coll['_self'],
-            {
-                'query': 'SELECT * FROM c.outside.temp'
-            }))
-
-    outsideTemp = map(float, simplejson.loads(json.dumps(query)))
-
-    query = list(client.QueryDocuments(coll['_self'],
-            {
-                'query': 'SELECT * FROM c.counter'
-            }))
-
-    counter = json.dumps(query)
-
-    return render_template('results.html',
-            year=datetime.now().year,
-            docs = json.dumps(pretty, indent=4),
-            insideTemp = insideTemp[-25:],
-            outsideTemp = outsideTemp[-25:],
-            counter = 50)
 
 @app.route("/latest")
 def new():

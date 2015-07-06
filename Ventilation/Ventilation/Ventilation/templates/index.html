@@ -1,12 +1,183 @@
 {% extends "layout.html" %}
 {% block content %}
-<h2>Ventilation system</h2>
+<h2>Measurements</h2>
 
-<p>
-    <a href="create" class="btn btn-primary btn-large">Create/Clear the database &raquo;</a>
-</p>
+<style type="text/css">
+    .chart-legend li {
+        list-style-type: none;
+    }
 
-<h3>{{ message }}</h3>
+    .chart-legend li span {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        margin-right: 5px;
+    }
+
+    .temperature {
+        font-size: 3em;
+    }
+
+    canvas {
+        width: 100%;
+        height: auto;
+    }
+</style>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title text-center">Inside</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6 temperature text-center">
+
+                            <span id="temp">0.0</span>&#176;C
+
+                        </div>
+                        <div class="col-md-6 temperature text-center">
+
+                            <span id="inhum">0.0</span>
+
+                        </div>
+                    </div>
 
 
-{% endblock %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title text-center">Outside</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-center temperature">
+                                <span id="outtemp">0.0</span>&#176;C
+                            </p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <p class="text-center temperature">
+                                <span id="outhum">0.0</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id="js-legend" class="chart-legend"></div>
+            <canvas id="myChart" width="300" height="300"></canvas>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    setInterval(function() { updateStats(); }, 1000);
+
+    var j = 0;
+
+    function updateStats() {
+        $.getJSON( "/latest", function( data ) {
+
+            
+            var inside = Math.round(data[0].inside.temp * 100) / 100;
+            var outside = Math.round(data[0].outside.temp * 100) / 100;
+
+            $('#temp').text(inside);
+            $('#outtemp').text(outside);
+
+            $('#inhum').text(Math.round(data[0].inside.abs_humid*100)/100);
+            $('#outhum').text(Math.round(data[0].outside.abs_humid*100)/100);
+
+            $('#random').text(Math.floor((Math.random() * 10) + 1));
+
+            
+            if ((j % 5) == 0) {
+                myLineChart.addData([inside, outside], '');
+            
+                myLineChart.removeData();
+            }
+
+            j++;
+
+           
+        });
+    }
+
+
+    var ctx = document.getElementById("myChart").getContext("2d");
+
+    //Chart.defaults.global.responsive = true;
+    Chart.defaults.global.scaleShowLabels = false;
+
+    var inside = {{insideTemp}}
+    var outside = {{outsideTemp}}
+    var counter = {{counter}}
+    var labels = []
+
+    for (i = 0; i < counter; i++) {
+        labels.push("");
+    }
+
+    var data = {
+        labels: labels,
+        datasets: [
+            {
+                label: "Inside Temperatur",
+                fillColor: "rgba(255,255,255,0.2)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: inside
+            },
+            {
+                label: "Outside Temperature",
+                fillColor: "rgba(255,255,255,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(151,187,205,1)",
+                data: outside
+            }
+        ]
+    };
+
+    var myLineChart = new Chart(ctx).Line(data, {
+        pointDotStrokeWidth:1,
+        pointDotRadius : 2,
+        bezierCurve : true,
+        scaleOverride : true,
+        scaleSteps : 1,
+        scaleStepWidth : 20,
+        scaleStartValue : 20,
+        scaleLabel : "<%=value%>"
+    });
+
+    document.getElementById('js-legend').innerHTML = myLineChart.generateLegend();
+
+</script>
+
+    {% endblock %}
+
