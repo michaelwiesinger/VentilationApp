@@ -2,6 +2,11 @@
 {% block content %}
 <h2>Measurements</h2>
 
+<p>
+    Current inside temperature: <span class="temp" id="temp">0.0</span>
+    Current outside temperature: <span class="temp" id="outtemp">0.0</span>
+    Current humidity: <span class="temp" id="hum">0.0</span>
+</p>
 
 <!--{{insideTemp}} <br/>>
 {{dates}}
@@ -13,57 +18,62 @@
 
 <script>
     
-    var ctx = document.getElementById("myChart").getContext("2d");
+        var ctx = document.getElementById("myChart").getContext("2d");
 
-    Chart.defaults.global.responsive = true;
-    Chart.defaults.global.scaleShowLabels = false;
+        Chart.defaults.global.responsive = true;
+        Chart.defaults.global.scaleShowLabels = false;
 
+        var inside = {{insideTemp}}
+        var outside = {{outsideTemp}}
+        var counter = {{counter}}
+        var labels = []
+
+        $('#temp').text(inside[24]);
+        $('#outtemp').text(outside[24]);
+
+        for (i = 0; i < counter; i++) {
+            labels.push("");
+        }
+
+        var data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Inside Temperatur",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: inside
+                },
+                {
+                    label: "Outside Temperature",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: outside
+                }
+            ]
+        };
+
+        var myLineChart = new Chart(ctx).Line(data, {
+            pointDotStrokeWidth:1,
+            pointDotRadius : 2,
+            bezierCurve : true,
+            scaleOverride : true,
+            scaleSteps : 0.5,
+            scaleStepWidth : 20,
+            scaleStartValue : 20,
+            scaleLabel : "<%=value%>"
+        });
+
+        document.getElementById('js-legend').innerHTML = myLineChart.generateLegend();
     
-    var inside = {{insideTemp}}
-    var outside = {{outsideTemp}}
-    var counter = {{counter}}
-    var labels = []
-    
-    for (i = 0; i < counter; i++) {
-        labels.push("");
-    }
-    
-    var data = {
-        labels: labels,
-        datasets: [
-            {
-                label: "Inside Temperatur",
-                fillColor: "rgba(220,220,220,0.2)",
-                strokeColor: "rgba(220,220,220,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
-                data: inside
-            },
-            {
-                label: "Outside Temperature",
-                fillColor: "rgba(151,187,205,0.2)",
-                strokeColor: "rgba(151,187,205,1)",
-                pointColor: "rgba(151,187,205,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(151,187,205,1)",
-                data: outside
-            }
-        ]
-    };
-
-    
-
-    var myLineChart = new Chart(ctx).Line(data,{
-        scaleOverride : true,
-        scaleSteps : 1,
-        scaleStepWidth : 20,
-        scaleStartValue : 20 
-    });
-
-    document.getElementById('js-legend').innerHTML = myLineChart.generateLegend();
 </script>
 
 
@@ -71,7 +81,6 @@
 
 
 </pre>-->
-
 {% endblock %}
 
 <style type="text/css">

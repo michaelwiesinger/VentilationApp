@@ -60,6 +60,7 @@
     <Content Include="Ventilation\static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Ventilation\static\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Ventilation\static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Ventilation\static\scripts\app.js" />
     <Content Include="Ventilation\static\scripts\bootstrap.js" />
     <Content Include="Ventilation\static\scripts\bootstrap.min.js" />
     <Content Include="Ventilation\static\scripts\bower_components\Chart.js\Chart.min.js" />
