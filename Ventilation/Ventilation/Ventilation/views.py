@@ -352,8 +352,6 @@ def create():
           })
 
 
- 
-
     return render_template('create.html',
         title='Create Page',
         year=datetime.now().year,
