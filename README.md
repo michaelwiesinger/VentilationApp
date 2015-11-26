@@ -7,7 +7,7 @@ sensors are place.
 The Raspberry is using a temperature and a humidity sensor and sends the data to the Servers REST API, which displays the current data, aswell as history.
 If a certain threshold of humidity is breached, the server sends a signal to api, which sends an event back to the Pi to trigger the ventilation.
 
-![Alt text](/Ventilation/Doc/architecture.png?raw=true "Optional Title")
+![Architecture](/Ventilation/Doc/architecture.PNG?raw=true "Optional Title")
 
 ## User Components
 
