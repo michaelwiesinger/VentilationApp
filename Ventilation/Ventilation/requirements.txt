@@ -4,7 +4,7 @@ cffi==1.1.2
 cryptography==0.9.2
 decorator==3.4.2
 enum34==1.0.4
-Flask==0.10.1
+Flask==1.0
 Flask-Babel==0.8
 Flask-Mail==0.7.6
 Flask-SQLAlchemy==0.16
