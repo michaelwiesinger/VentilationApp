@@ -14,7 +14,7 @@ flup==1.0.2
 idna==2.0
 ipaddress==1.0.7
 itsdangerous==0.24
-Jinja2==2.7.3
+Jinja2==2.11.3
 MarkupSafe==0.23
 ndg-httpsclient==0.4.0
 pusher==1.2.3
